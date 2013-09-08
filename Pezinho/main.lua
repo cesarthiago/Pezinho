@@ -9,6 +9,8 @@ larguraTela = display.contentWidth;
 alturaTela = display.contentHeight;
 motionX= 0; -- movimento no eixo x
 velocidade = 5; --velocidade do jogador
+lifes = 3 --vidas jogador
+score = 0 --pontuacao
 
 -- Add ceu
 local sky = display.newImage( "imagens/background_sky.png", true )
@@ -39,6 +41,29 @@ teto = display.newRect(0,-250,display.contentWidth,1)
 physics.addBody(paredeEsquerda, "static", {bounce = 0.1 })
 physics.addBody(paredeDireita, "static", {bounce = 0.1 })
 physics.addBody(teto, "static", {bounce = 0.5 })
+
+-- Exibe pontuação
+
+textScore = display.newText("Score: 0", 10 , 10, "Helvetica", 20)
+textScore:setReferencePoint(display.TopLeftReferencePoint)
+textScore:setTextColor(255,255,255)
+textScore.x = display.contentWidth - 310
+textScore.y = display.screenOriginX + 5
+
+-- Exibe vidas
+
+textLives = display.newText("Vidas: ", 10, 30, "Helvetica", 15)
+textLives:setReferencePoint(display.TopLeftReferencePoint)
+textLives:setTextColor(255,255,255)
+textLives.x = display.contentWidth - 310
+textLives.y = display.screenOriginY + 70
+
+local function updateScore(num)
+	score= score + num
+	textScore.text = "Score " .. score
+	textScore:setReferencePoint(display.TopLeftReferencePoint)
+	textScore.x = display.contentWidth - 310
+end
 
 -- Add  Botao Jump button
 local up = display.newImage ("imagens/btn_arrow.png")
