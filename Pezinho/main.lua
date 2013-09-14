@@ -3,6 +3,9 @@ display.setStatusBar( display.HiddenStatusBar )
 local physics = require("physics")
 physics.start()
 physics.setGravity(0, 10)
+local sprite = require("sprite")
+
+--physics.setDrawMode("hybrid")
 
 -- Variaveis
 larguraTela = display.contentWidth;
@@ -21,16 +24,19 @@ local grass_bottom = display.newImage( "imagens/grass_bottom.png", true )
 grass_bottom.x = larguraTela/2; grass_bottom.y = alturaTela-35;
 physics.addBody( grass_bottom, "static", { friction=100, bounce=0.3 } )
 
+
+
+
 -- Add Jogador		
-local player = display.newImage( "imagens/menino.png" )
-physics.addBody(player , "dynamic", { friction=-500,density=1000, bounce=-110 } ) 
+local player = display.newImage( "imagens/jogador.png" )
+physics.addBody(player , "dynamic", { friction=-500,density=4000, bounce=-110, radius= 40} ) 
 player.x = 50
 player.y= 340
 
 --add bola
 local bola = display.newImage("imagens/bola.png")
 bola.x = display.contentWidth/2
-physics.addBody(bola,"dynamic", { friction=100, density= 10, bounce=.9 } )
+physics.addBody(bola,"dynamic", { friction=100, density= 10, bounce=.9, radius = 30  } )
 
 
 --paredes
@@ -42,7 +48,7 @@ physics.addBody(paredeEsquerda, "static", {bounce = 0.1 })
 physics.addBody(paredeDireita, "static", {bounce = 0.1 })
 physics.addBody(teto, "static", {bounce = 0.5 })
 
--- Exibe pontuaÃ§Ã£o
+-- Exibe pontuação
 
 textScore = display.newText("Score: 0", 10 , 10, "Helvetica", 20)
 textScore:setReferencePoint(display.TopLeftReferencePoint)
@@ -52,7 +58,7 @@ textScore.y = display.screenOriginX + 5
 
 -- Exibe vidas
 
-textLives = display.newText("Vidas: ", 10, 30, "Helvetica", 15)
+textLives = display.newText("Vidas: 3", 10, 30, "Helvetica", 15)
 textLives:setReferencePoint(display.TopLeftReferencePoint)
 textLives:setTextColor(255,255,255)
 textLives.x = display.contentWidth - 310
@@ -65,7 +71,7 @@ local function updateScore(num)
 	textScore.x = display.contentWidth - 310
 end
 
--- Add  Botao Jump button
+-- Add Botao Jump button
 local up = display.newImage ("imagens/btn_arrow.png")
 	up.x = 280; up.y = 480;
 	up.rotation = 270
