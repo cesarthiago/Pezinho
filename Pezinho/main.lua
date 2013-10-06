@@ -6,7 +6,7 @@ physics.setGravity(0, 10)
 local sprite = require("sprite")
 
 
---physics.setDrawMode("hybrid")
+physics.setDrawMode("hybrid")
 
 -- Variaveis
 larguraTela = display.contentWidth;
@@ -28,16 +28,17 @@ physics.addBody( grass_bottom, "static", { friction=100, bounce=0.3 } )
 
 -- Add Jogador		
 local player = display.newImage( "imagens/jogador.png" )
-physics.addBody(player , "dynamic", { friction=-500,density=4000, bounce=-110, radius= 40} ) 
+physics.addBody(player , "dynamic", { friction= -500,density= 40, bounce= 0, radius= 45} ) 
 player.isFixedRotation=true
 player.x = 50
 player.y= 340
+player.myName= "player"
 
 --add bola
 local bola = display.newImage("imagens/bola2.png")
 bola.x = display.contentWidth/2
-physics.addBody(bola,"dynamic", { friction=100, density= 10, bounce=.9, radius = 15  } )
-
+physics.addBody(bola,"dynamic", { friction=200, density= 30, bounce=.9, radius = 13.5  } )
+bola.myName= "bola"
 
 --paredes
 paredeEsquerda = display.newRect( 0, -200, 1, 800)
@@ -53,7 +54,7 @@ physics.addBody(teto, "static", {bounce = 0.5 })
 textScore = display.newText("0", 10 , 10, "Helvetica", 20)
 textScore:setReferencePoint(display.TopLeftReferencePoint)
 textScore:setTextColor(255,255,255)
-textScore.x = display.contentWidth - 310
+textScore.x = display.contentWidth - 290
 textScore.y = display.screenOriginX + 5
 
 -- Exibe vidas
@@ -65,12 +66,14 @@ textLives.x = display.contentWidth - 310
 textLives.y = display.screenOriginY + 70
 
 local function updateScore(event)
-	textScore.text=tonumber(textScore.text) + 100
+	textScore.text=tonumber(textScore.text) + 50
 end
 
 local function onCollision(event)
-	if(event.object1 =="bola" or event.object2 =="bola") then
+	if((event.object1.myName == "bola" and event.object2.myName =="player") or (event.object1.myName == "player" and event.object2.myName =="bola")) then
+		score = score + 50
 		updateScore()
+		print(score)
 	end
 end
 	
@@ -124,4 +127,4 @@ local function moveDireita (event)
 end
 botaoDireito:addEventListener("touch",moveDireita)
 
-
+Runtime:addEventListener("collision",onCollision)
