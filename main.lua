@@ -17,7 +17,7 @@ local playBtn
 local creditsBtn
 local titleView
 
--- [Credits]
+-- [Creditos]
 
 local creditsView
 
@@ -25,15 +25,15 @@ local creditsView
 
 local gameBg
 
--- TextFields
+-- texto
 
 local scoreTF
 
--- Instructions
+-- Instrucoes
 
 local ins
 
--- Ball
+-- Bola
 
 local ball
 
@@ -41,11 +41,11 @@ local ball
 
 local alertView
 
--- Sounds
+-- som
 
 local ballHit = audio.loadSound('imagens/Footbal_kick.mp3')
 
--- Variables
+-- Variaveis
 
 local floor
 
@@ -69,6 +69,7 @@ local gameListeners = {}
 local onTap = {}
 local onCollision = {}
 local alert = {}
+local alert2 = {}
 
 -- Main Function
 
@@ -94,7 +95,7 @@ end
 function showCredits:tap(e)
 	playBtn.isVisible = false
 	creditsBtn.isVisible = false
-	creditsView = display.newImage("credits.png", -130, display.contentHeight-50)
+	creditsView = display.newImage("imagens/credits.png", -130, display.contentHeight-50)
 	transition.to(creditsView, {time = 300, x = 65, onComplete = function() creditsView:addEventListener('tap', hideCredits) end})
 end
 
@@ -118,7 +119,7 @@ function showGameView:tap(e)
 	local ins = display.newImage("imagens/ins.png", 44, 214)
 	transition.from(ins, {time = 200, alpha = 0.1, onComplete = function() timer.performWithDelay(2000, function() transition.to(ins, {time = 200, alpha = 0.1, onComplete = function() display.remove(ins) ins = nil end}) end) end})
 	
-	-- TextFields
+	-- texto
 	
 	scoreTF = display.newText('0', 62, 295, 'Helvetica', 16)
 	scoreTF:setTextColor(255, 204, 0)
@@ -128,17 +129,17 @@ function showGameView:tap(e)
 	ball = display.newImage("imagens/bola.png", 205, 250)
 	ball.name = "ball"
 	
-	-- Floor
+	-- chao
 	
 	floor = display.newLine(240, 321, 700, 321)
 	
 	-- Add Physics
 	
-	-- Ball
+	-- bola
 	
-	physics.addBody(ball, 'dynamic', {friction = .5, bounce = .2, radius = 30})
+	physics.addBody(ball, 'dynamic', {friction = .2, bounce = .2, radius = 30})
 	
-	-- Floor
+	-- chao
 	
 	physics.addBody(floor, 'static', {friction = .5 })
 	
@@ -155,19 +156,19 @@ end
 
 function gameListeners(action)
 	if(action == 'add') then
-		ball:addEventListener('touch', onTap)
+		ball:addEventListener('tap', onTap)
 		floor:addEventListener('collision', onCollision)
 	else
-		ball:removeEventListener('touch', onTap)
+		ball:removeEventListener('tap', onTap)
 		floor:removeEventListener('collision', onCollision)
 	end
 end
 
 function onTap(e)
 	audio.play(ballHit)
-	ball:applyForce( 0.5, -15, ball.x, ball.y)
+	ball:applyForce(math.random(-1, 1), -15, ball.x, ball.y)
 		
-	-- Update Score
+	-- Update Pontuacao
 		
 	scoreTF.text = tostring(tonumber(scoreTF.text) + 1)
 end
@@ -175,7 +176,7 @@ end
 
 
 function alert(score)
-	gameListeners('rmv')
+	gameListeners('remove')
 	alertView = display.newImage("imagens/alert.png", (display.contentWidth * 0.5) - 105, (display.contentHeight * 0.5) - 55)
 	transition.from(alertView, {time = 300, xScale = 0.5, yScale = 0.5})
 	
@@ -183,9 +184,34 @@ function alert(score)
 	
 	timer.performWithDelay(2000, function() physics.stop() end, 1)
 	
+	
+	playBtn = display.newImage("imagens/playBtn.png", 219, 219)
+	--startButtonListeners('add')
+	playBtn:addEventListener('tap', restart)
+	--gameListeners('remove')
+	
+end
+
+
+--[[function alert2()
+
+	startButtonListeners('add')
+	
 	--playBtn = display.newImage("imagens/playBtn.png", 219, 219)
 	
+	playBtn:addEventListener('tap', restart)
 	
+	gameListeners('remove')
+	
+end]]--
+
+function restart()
+	--display.remove(titleView)
+	titleView = nil
+	--display.remove(alert)
+	alert = nil
+	
+	Main()
 end
 
 Main()
